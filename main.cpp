@@ -8,20 +8,62 @@
 
 using namespace std;
 
-void draw_gui(float selected_index);  // Prototyp funkcji, która będzie nam wyświetlała na ekranie sekcje menu i konsoli
+void draw_gui(float selected_index, deque<string> &output);  // Prototyp funkcji, która będzie nam wyświetlała na ekranie sekcje menu i konsoli
+
+void update_output_queue(deque<string> &output, string line);
 
 int main()
 {
 
     const int screenWidth = 1400;
     const int screenHeight = 1000;
+    deque<string> console_output(5);
     InitWindow(screenWidth, screenHeight, "GigantMony");
+
+    Poks player("Fire",20,10,5,Element::Fire, "resources/Fire.png");
+    Poks enemy("Water",20,10,5,Element::Water, "resources/Water.png");
 
     float selected_idx{}; // zmienna do wyboru opcji na ekranie
     SetTargetFPS(60);
     while (!WindowShouldClose())
     {
-        
+        if(IsKeyPressed(KEY_UP))
+        {
+            selected_idx--;
+            selected_idx = selected_idx < 0 ? 2 : selected_idx;
+        }
+        else if(IsKeyPressed(KEY_DOWN))
+        {
+            selected_idx++;
+            selected_idx = selected_idx > 2 ? 0 : selected_idx;
+        }
+
+        if(IsKeyPressed(KEY_ENTER))
+        {
+            string text{};
+            switch(int(selected_idx))
+            {
+                case 0:
+                    player.attack(enemy, text);
+                    update_output_queue(console_output, text);
+                break;
+
+                case 1:
+                     player.defend(text);
+                    update_output_queue(console_output, text);
+                break;
+
+                case 2:
+                    player.special(enemy, text);
+                    update_output_queue(console_output, text);  
+                break;
+
+                default:
+                break;
+            }
+                  enemy.attack(player, text);
+                  update_output_queue(console_output, text);
+        }
         
 
         
@@ -29,7 +71,10 @@ int main()
 
         ClearBackground(SKYBLUE);
 
-        draw_gui(selected_idx);
+        draw_gui(selected_idx, console_output);
+
+        player.render(screenWidth / 2 - 520, screenHeight / 2 - 220);
+        enemy.render(screenWidth / 2 + 150, screenHeight / 2 - 350);
 
         EndDrawing(); // MIEJSCE "STOP" WYŚWIETLANIA CONTENTU NA EKRANIE
     }
@@ -37,7 +82,7 @@ int main()
     return 0;
 }
 
-void draw_gui(float selected)
+void draw_gui(float selected, deque<string> &output)
 {
     Rectangle menu{-2, 810, 800, 310}; 
     /* 
@@ -65,4 +110,22 @@ void draw_gui(float selected)
     Rectangle console{906, 810, 600, 310};
 
     DrawRectangleLinesEx(console, 4, BLACK);
+
+    int offset = 0;
+
+    for(auto line : output)
+    {
+        DrawText(line.c_str(), 920, 920 - 25 * offset, 20, BLACK);
+        offset++;
+    }
+
+}
+
+void update_output_queue(deque<string> &output, string line)
+{
+    output.push_back(line);
+    if(output.size() > 5)
+    {
+        output.pop_front();
+    }
 }
