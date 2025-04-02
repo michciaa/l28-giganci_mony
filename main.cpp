@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void draw_gui(); // Prototyp funkcji, która będzie nam wyświetlała na ekranie sekcje menu i konsoli
+void draw_gui(int selected_index);  // Prototyp funkcji, która będzie nam wyświetlała na ekranie sekcje menu i konsoli
 
 int main()
 {
@@ -56,7 +56,7 @@ void draw_gui(int selected)
     // Funkcja rysująca tekst: 
     // DrawText(Tekst do wyświetlenia, pozycja x, pozycja y, wielkość czcionki, kolor czcionki)
 
-    DrawText("Defend", 15, 850, 30, BLACK); 
+    DrawText("Defend", 15, 900, 30, BLACK); 
     DrawText("Special attack", 15, 950, 30, BLACK);
 
     Rectangle selection{10, 830 + selected * 50, 400, 60};
