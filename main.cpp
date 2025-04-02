@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void draw_gui(int selected_index);  // Prototyp funkcji, która będzie nam wyświetlała na ekranie sekcje menu i konsoli
+void draw_gui(float selected_index);  // Prototyp funkcji, która będzie nam wyświetlała na ekranie sekcje menu i konsoli
 
 int main()
 {
@@ -17,7 +17,7 @@ int main()
     const int screenHeight = 1000;
     InitWindow(screenWidth, screenHeight, "GigantMony");
 
-    int selected_idx{}; // zmienna do wyboru opcji na ekranie
+    float selected_idx{}; // zmienna do wyboru opcji na ekranie
     SetTargetFPS(60);
     while (!WindowShouldClose())
     {
@@ -37,7 +37,7 @@ int main()
     return 0;
 }
 
-void draw_gui(int selected)
+void draw_gui(float selected)
 {
     Rectangle menu{-2, 810, 800, 310}; 
     /* 
