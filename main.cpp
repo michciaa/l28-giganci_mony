@@ -20,13 +20,26 @@ int main()
     deque<string> console_output(5);
     InitWindow(screenWidth, screenHeight, "GigantMony");
 
-    Poks player("Fire",20,10,5,Element::Fire, "resources/Fire.png");
-    Poks enemy("Water",20,10,5,Element::Water, "resources/Water.png");
+    Poks player("Fire",20,10,5,Element::Fire, "resources/Fire.png", PoksAttacks::Fireball);
+    Poks enemy("Water",20,10,5,Element::Water, "resources/Water.png", PoksAttacks::WaterCannon);
 
     float selected_idx{}; // zmienna do wyboru opcji na ekranie
+    bool win{}, lose{};
+
     SetTargetFPS(60);
     while (!WindowShouldClose())
     {
+        if(!lose && !win)
+        {
+            if(player.get_hp() <= 0)
+            {
+                lose = true;
+            }
+            if(enemy.get_hp() <= 0)
+            {
+                win = true;
+            }
+        
         if(IsKeyPressed(KEY_UP))
         {
             selected_idx--;
@@ -60,11 +73,12 @@ int main()
 
                 default:
                 break;
-            }
+            
                   enemy.attack(player, text);
                   update_output_queue(console_output, text);
+            }
         }
-        
+        }
 
         
         BeginDrawing(); // MIEJSCE "START" WYŚWIETLANIA CONTENTU NA EKRANIE
@@ -73,9 +87,19 @@ int main()
 
         draw_gui(selected_idx, console_output);
 
-        player.render(screenWidth / 2 - 520, screenHeight / 2 - 220);
-        enemy.render(screenWidth / 2 + 150, screenHeight / 2 - 350);
-
+        if(!lose && !win)
+        {
+            player.render(screenWidth / 2 - 520, screenHeight / 2 - 220);
+            enemy.render(screenWidth / 2 + 150, screenHeight / 2 - 350);
+        }
+        else if (win)
+        {
+            DrawText("You win!", 480, 300, 85, BLACK);
+        }
+        else if(lose)
+        {
+             DrawText("Game over", 480, 300, 85, BLACK);
+        }
         EndDrawing(); // MIEJSCE "STOP" WYŚWIETLANIA CONTENTU NA EKRANIE
     }
     CloseWindow();

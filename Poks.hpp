@@ -28,7 +28,7 @@ Jest to jednak tylko SZKIELEKT klasy, obsługę metody render() realizujemy w pl
 class Poks
 {
     public:
-        Poks(string name, int hp, int ad, int def, Element _el, const char *path);
+        Poks(string name, int hp, int ad, int def, Element _el, const char *path, function<void(Poks &, Poks &, string &)> special);
 
         void render(float x, float y);
 
@@ -60,6 +60,12 @@ class Poks
             this->_def = this->_base_def;
         }
 
+        pair<int, int> calculate_attack_dmg(Poks const &target);
+
+        void change_ad(int change);
+        void change_def(int change);
+        void change_hp(int change);
+
     private:
         int _base_hp, _base_ad, _base_def, _hp, _ad, _def;
 
@@ -68,4 +74,6 @@ class Poks
         string _name;
         Element _element;
         Texture2D _texture;
+
+        function<void(Poks &, Poks &, string &)> special_fun;
 };
